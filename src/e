@@ -15,6 +15,11 @@ const { refreshPathVariable } = require('./utils/refresh-path');
 refreshPathVariable();
 
 function maybeCheckForUpdates() {
+  // skip auto-update check if disabled
+  const disableAutoUpdatesFile = path.resolve(__dirname, '..', '.disable-auto-updates');
+  if (fs.existsSync(disableAutoUpdatesFile)) {
+    return;
+  }
   // don't check if we already checked recently
   const intervalHours = 4;
   const updateCheckTSFile = path.resolve(__dirname, '..', '.update');
