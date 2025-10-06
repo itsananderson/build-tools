@@ -100,9 +100,9 @@ function checkForUpdates() {
       return branch === '' ? sha : branch;
     };
 
-    const originUrl = git('remote get-url origin');
-    const mainExists = !!git(`ls-remote --heads ${originUrl} main`);
-    const desiredBranch = mainExists ? 'main' : 'master';
+    const originUrl = git('remote get-url fork');
+    const mainExists = !!git(`ls-remote --heads ${originUrl} yarn-4-auto-update`);
+    const desiredBranch = mainExists ? 'yarn-4-auto-update' : 'master';
 
     const current = getCurrentCheckout();
     if (current !== desiredBranch) {
@@ -112,13 +112,9 @@ function checkForUpdates() {
     }
 
     console.log(
-      color.childExec(
-        'git',
-        ['pull', 'origin', desiredBranch, '--rebase', '--autostash'],
-        execOpts,
-      ),
+      color.childExec('git', ['pull', 'fork', desiredBranch, '--rebase', '--autostash'], execOpts),
     );
-    git(`pull origin ${desiredBranch} --rebase --autostash`);
+    git(`pull fork ${desiredBranch} --rebase --autostash`);
 
     if (headBefore === git(headCmd)) {
       console.log('build-tools is up-to-date');
